@@ -8,7 +8,7 @@ function TaskList() {
   const tasks = useContext(TaskContext);
   const dispatch = useContext(TaskContextDispatch);
 
-  const listItems = tasks.map(task => {
+  const listItems = tasks.length !== 0? tasks.map(task => {
     return ( <li key={task.id}>
       <Card title={task.title} content={task.content}>
         <div style={{ display: "flex" }}>
@@ -31,7 +31,7 @@ function TaskList() {
         </div>
       </Card>
     </li>);
-  });
+  }): <p>No Task in List</p>;
 
   return <ul style={{
     padding: "0px",

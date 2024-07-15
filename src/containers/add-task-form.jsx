@@ -11,22 +11,28 @@ function AddTaskForm({ title = "Form Title" }) {
   })
   const dispatch = useContext(TaskContextDispatch);
 
-  function handleInputChange(e) {
-    setFormData(
-      {
-        ...formData,
-        [e.target.name]: e.target.value,
-      }
-    );
+  function handleInputChange(e) {  
+      setFormData(
+        {
+          ...formData,
+          [e.target.name]: e.target.value,
+        }
+      );
   }
 
   function handleFormSubmit(e) {
     e.preventDefault();
     e.stopPropagation();
-    dispatch({
-      type: "addTask",
-      task: {...formData, id: uuid4()},
-    });
+    // console.log(typeof formData.content);
+    if(!formData.content.length || !formData.title.length) {
+      console.log("empty form");
+      return;
+    } else {
+      dispatch({
+        type: "addTask",
+        task: {...formData, id: uuid4()},
+      });
+    }
   }
 
   return (
