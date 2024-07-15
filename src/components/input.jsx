@@ -1,11 +1,21 @@
+import { useState } from "react";
+
 function Input({
   name = "defaultName",
-  value = "defaultValue",
   type = "text",
   placeholder = "enter something...",
+  onChange,
+  ...props
 }) {
+
   return (
-    <input type={type} name={name} value={value} placeholder={placeholder} />
+    <input
+      onChange={onChange}
+      type={type}
+      name={name}
+      placeholder={placeholder}
+      style={props.style}
+    />
   );
 }
 

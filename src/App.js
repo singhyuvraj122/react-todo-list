@@ -1,30 +1,74 @@
 import "./App.css";
-import AddTask from "./pages/add-task";
 import Button from "./components/button";
-import Input from "./components/input";
 import Card from "./components/card";
-import Form from "./pages/addTaskForm";
+import AddTaskForm from "./containers/add-task-form";
+import { createContext, useState, useReducer } from "react";
+import TaskList from "./containers/task-list";
+import { v4 as uuid4 } from "uuid";
+
+export const TaskContext = createContext();
+export const TaskContextDispatch = createContext();
+
+const initialTasks = [];
+
+function taskReducer(tasks, action) {
+  switch (action.type) {
+    case "addTask": {
+      return [...tasks, action.task];
+    }
+    case "deleteTask": {
+      let updatedTasks = tasks.filter((task) => {
+        return task.id !== action.id;
+      });
+      console.log(updatedTasks);
+      return updatedTasks;
+    }
+    case "updateTask": {
+      return tasks.map((task) => {
+        if (task.id === action.id) {
+          task = { ...action.updatedTask };
+        }
+        return task;
+      });
+    }
+    case "getTask": {
+      return tasks;
+    }
+  }
+}
 
 function App() {
+  const [tasks, dispatch] = useReducer(taskReducer, initialTasks);
+
   return (
-    <>
-      <h1>hello world</h1>
-      {/* Task List Item Component */}
-      <h3>Task List Component</h3>
-      <Card title="Task 1" content="Drink milk">
-        <div style={{display: "flex",}}>
+    <TaskContext.Provider value={tasks}>
+      <TaskContextDispatch.Provider value={dispatch}>
+        <div style={{
+          height: "95vh",
+          minWidth: "maxContent",
+          padding: "10px",
+          overflow: "hidden",
+          border: "2px solid red",
+          display: "flex",
+          flexWrap: "wrap",
+
+          justifyContent: "space-evenly",
+        }}>
           <div>
-            <Button>Edit</Button>
+            {/* Add Task Form Component */}
+            <h3>Add Task Form Component</h3>
+            <AddTaskForm />
           </div>
-          <div>
-            <Button>Delete</Button>
+          <div style={{minHeight: "40%", maxHeight: "80%"}}>
+            {/* Task List Item Component */}
+            <h3>Task List Component</h3>
+            <TaskList />
           </div>
         </div>
-      </Card>
-      {/* Add Task Form Component */}
-      <h3>Add Task Form Component</h3>
-      <Form />
-    </>
+        
+        
+      </TaskContextDispatch.Provider>
+    </TaskContext.Provider>
   );
 }
 
