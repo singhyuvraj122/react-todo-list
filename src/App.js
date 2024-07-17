@@ -24,12 +24,16 @@ function taskReducer(tasks, action) {
       return updatedTasks;
     }
     case "updateTask": {
-      return tasks.map((task) => {
-        if (task.id === action.id) {
-          task = { ...action.updatedTask };
+      console.log("edit task");
+      console.log("old task list ", tasks);
+      let updatedTaskList = tasks.map(task => {
+        if(task.id === action.task.id) {
+          return {...task, ...action.task}
         }
         return task;
       });
+      console.log("new task list ", updatedTaskList);
+      return updatedTaskList;
     }
     case "getTask": {
       return tasks;
@@ -47,7 +51,7 @@ function App() {
           height: "95vh",
           minWidth: "maxContent",
           padding: "10px",
-          overflow: "hidden",
+          overflow: "auto",
           border: "2px solid red",
           display: "flex",
           flexWrap: "wrap",
